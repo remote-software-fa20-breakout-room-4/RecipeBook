@@ -18,8 +18,17 @@ public class RecipeBook implements java.io.Serializable {
 	}
 
   /** ToDo */
-	public void /** Change Return Type */ searchRecipe() {
-		// ToDo: Maté
+	public Recipe searchRecipe(String searchedName) {
+	// ToDo: Máté
+
+		for(int i = 0; i < recipes.size(); i++) {
+			String currentRecipeName = this.recipes.get(i).getName();
+			if(currentRecipeName.contains(searchedName)) {
+				return recipes.get(i);
+			}
+
+		}
+		return recipes.get(0);
 	}
 
 	public void addRecipe(Recipe recipe) {

@@ -22,9 +22,9 @@ public class ExampleReader {
             System.out.println("Deserialized from example/example.ser");
             System.out.println("Exit");
 
-	        ArrayList<Recipe> allRecipes = recipeBook.getRecipes();
-	        Recipe testRecipe = allRecipes.get(0);
-	        System.out.println(testRecipe.getName());
+            Recipe foundRecipe = recipeBook.searchRecipe("Ramen");
+	        System.out.println(foundRecipe.getName());
+	        System.out.println(foundRecipe.getDescription());
 
         } catch (IOException i) {
             i.printStackTrace();
