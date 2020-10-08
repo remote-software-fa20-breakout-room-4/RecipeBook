@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /** Main state store for program. */
 public class RecipeBook implements java.io.Serializable {
-	private static int recipeId = 0;
+	private static int recipeID = 0;
 
 	private ArrayList<Recipe> recipes;
 
@@ -24,6 +24,6 @@ public class RecipeBook implements java.io.Serializable {
 
 	public void addRecipe(Recipe recipe) {
 		this.recipes.add(recipe);
-		this.id++;
+		this.recipeID++;
 	}
 }
