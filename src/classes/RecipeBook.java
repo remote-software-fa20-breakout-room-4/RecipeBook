@@ -26,4 +26,8 @@ public class RecipeBook implements java.io.Serializable {
 		this.recipes.add(recipe);
 		this.recipeID++;
 	}
+
+	public ArrayList getRecipes() {
+		return this.recipes;
+	}
 }
