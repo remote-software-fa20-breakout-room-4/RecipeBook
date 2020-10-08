@@ -7,6 +7,11 @@ import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.File;
 
+/*
+ * This creates 5 sample recipes, puts them into a recipe book and serializes them.
+ * This example recipe book is saved to example/example.ser and is how we can test on a recipe book.
+ */
+
 public class ExampleWriter {
 	public static void main(String[] args) {
 		RecipeBook recipeBook = new RecipeBook();
