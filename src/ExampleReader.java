@@ -22,7 +22,7 @@ public class ExampleReader {
             System.out.println("Deserialized from example/example.ser");
             System.out.println("Exit");
 
-            Recipe foundRecipe = recipeBook.searchRecipe("Ramen");
+            Recipe foundRecipe = recipeBook.searchRecipe("e");
 	        System.out.println(foundRecipe.getName());
 	        System.out.println(foundRecipe.getDescription());
 
