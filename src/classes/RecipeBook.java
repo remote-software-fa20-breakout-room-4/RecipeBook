@@ -30,9 +30,25 @@ public class RecipeBook implements java.io.Serializable {
 			recipes.add(newRecipe);
 	}
 
-  /** ToDo */
-	public void /** Change Return Type */ searchRecipe() {
-		// ToDo: Maté
+	/*
+	The searchRecipe() function takes as input the search term as a string, then it returns the search results as an ArrayList of Recipes.
+	For the GUI, there are three cases you need to handle:
+		1. The arraylist is empty - no results
+		2. The arraylist has one element - a single result, just retrieve that
+		3. The arraylist has multiple elements - multiple results, prompt the user to decide which one they want to select
+	*/
+	public ArrayList<Recipe> searchRecipe(String searchedName) {
+		
+		ArrayList<Recipe> foundRecipes = new ArrayList<Recipe>(); // We'll be keeping the search results in a Recipe array that we return to the GUI
+
+		for(int i = 0; i < this.recipes.size(); i++) {
+			String currentRecipeName = this.recipes.get(i).getName();
+			if(currentRecipeName.contains(searchedName)) { // Simple condition that accounts for exact and substring matching
+				foundRecipes.add(recipes.get(i)); // Add every finding to the arraylist
+			}
+		}
+
+		return foundRecipes;
 	}
 
 	public void addRecipe(Recipe recipe) {
