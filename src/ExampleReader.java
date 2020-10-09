@@ -1,7 +1,4 @@
 import classes.RecipeBook;
-import classes.Recipe;
-import classes.Ingredient;
-import java.util.ArrayList;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.IOException;
@@ -21,11 +18,6 @@ public class ExampleReader {
             fileIn.close();
             System.out.println("Deserialized from example/example.ser");
             System.out.println("Exit");
-
-            Recipe foundRecipe = recipeBook.searchRecipe("e");
-	        System.out.println(foundRecipe.getName());
-	        System.out.println(foundRecipe.getDescription());
-
         } catch (IOException i) {
             i.printStackTrace();
             System.out.println("Fix:");
