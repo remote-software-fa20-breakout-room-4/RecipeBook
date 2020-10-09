@@ -17,14 +17,13 @@ public class Recipe implements java.io.Serializable {
 		this.steps = new ArrayList<String>();
 	}
 
-	/** I discourage this type of constructor for OOP, but add it for completeness. */
+	/** Also creates a new recipe object. Will be used for method in RecipeBook class*/
 	public Recipe(
 		int id,
 		String name, 
 		String description,
 		ArrayList<Ingredient> ingredients, 
-		ArrayList<String> steps
-		) {
+		ArrayList<String> steps ) {
 			this.id = id;
 			this.name = name;
 			this.description = description;
