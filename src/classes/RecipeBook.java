@@ -41,7 +41,6 @@ public class RecipeBook implements java.io.Serializable {
 
 		String searchedName = searchName.toLowerCase(); // Convert input to lowercase to get rid of case sensitivity
 		ArrayList<Recipe> foundRecipes = new ArrayList<Recipe>(); // We'll be keeping the search results in a Recipe array that we return to the GUI
-		System.out.println(searchedName);
 
 		for(int i = 0; i < this.recipes.size(); i++) {
 			String currentRecipeName = this.recipes.get(i).getName().toLowerCase(); // This goes all lowercase too
