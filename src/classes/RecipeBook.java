@@ -37,12 +37,13 @@ public class RecipeBook implements java.io.Serializable {
 		2. The arraylist has one element - a single result, just retrieve that
 		3. The arraylist has multiple elements - multiple results, prompt the user to decide which one they want to select
 	*/
-	public ArrayList<Recipe> searchRecipe(String searchedName) {
+	public ArrayList<Recipe> searchRecipe(String searchName) {
 
+		String searchedName = searchName.toLowerCase(); // Convert input to lowercase to get rid of case sensitivity
 		ArrayList<Recipe> foundRecipes = new ArrayList<Recipe>(); // We'll be keeping the search results in a Recipe array that we return to the GUI
 
 		for(int i = 0; i < this.recipes.size(); i++) {
-			String currentRecipeName = this.recipes.get(i).getName();
+			String currentRecipeName = this.recipes.get(i).getName().toLowerCase(); // This goes all lowercase too
 			if(currentRecipeName.contains(searchedName)) { // Simple condition that accounts for exact and substring matching
 				foundRecipes.add(recipes.get(i)); // Add every finding to the arraylist
 			}
