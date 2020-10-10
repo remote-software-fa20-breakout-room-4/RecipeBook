@@ -31,9 +31,12 @@ public class GUI implements ActionListener{
 		private FlowLayout layout;
 		private JList list;
 		private JDialog displayDialog;
+		private ArrayList<Recipe> recipes;
+		private ArrayList<String> recipeNames;
+		private RecipeBook recipeBook;
 
 	public GUI(){
-        RecipeBook recipeBook = null;
+        recipeBook = null;
         try {
             FileInputStream fileIn = new FileInputStream("example/example.ser");
             ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -66,8 +69,8 @@ public class GUI implements ActionListener{
 		//frame.add(recipesPanel); //add panel to frame
 
 		//create objects to put in panel
-		ArrayList<Recipe> recipes = recipeBook.searchRecipe("");
-		ArrayList<String> recipeNames = new ArrayList<String>();
+		recipes = recipeBook.searchRecipe("");
+		recipeNames = new ArrayList<String>();
 		for(int i = 0; i < recipes.size(); i++) {
 			String currentRecipeName = recipes.get(i).getName();
 			recipeNames.add(currentRecipeName);
@@ -79,7 +82,22 @@ public class GUI implements ActionListener{
 		//label.setBounds(10, 20, 160, 25); //x, y, w, h of label
 		button = new JButton("Search");
 		//button.setBounds(searchButtonX, searchButtonY, searchButtonWidth, searchButtonHeight);
-		button.addActionListener(this);
+		button.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub 
+				recipes = recipeBook.searchRecipe(search.getText());
+				recipeNames = new ArrayList<String>();
+				for(int i = 0; i < recipes.size(); i++) {
+					String currentRecipeName = recipes.get(i).getName();
+					recipeNames.add(currentRecipeName);
+				}
+				list.setListData(recipeNames.toArray());
+				list.setSelectedIndex(0);
+			}
+			
+		});
 		JButton displayButton = new JButton("Display Recipe");
 		displayButton.addActionListener(new ActionListener() {
 
