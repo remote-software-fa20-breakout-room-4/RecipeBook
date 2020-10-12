@@ -103,26 +103,32 @@ public class GUI implements ActionListener{
 	}
 
 	private void drawCreation(){
-		JFrame creationFrame = new JFrame("Create Recipe");
+		JDialog creationFrame = new JDialog();
+		creationFrame.setTitle("Create Recipe");
 		creationFrame.setSize(350, 350); //width height of window
 		creationFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		creationFrame.setVisible(true);
 		creationPanel = new JPanel(new GridLayout(0, 1));
 
 
 		//draw creation objects
 		JTextField nameText = new JTextField(10);
-		nameText.setText("Recipe Name");
+		//nameText.setText("Recipe Name");
 
 
 		JTextField descText = new JTextField(15);
-		descText.setText("Recipe Description");
+		//descText.setText("Recipe Description");
 
 		JTextField ingredientsText = new JTextField(15);
-		ingredientsText.setText("Ingredients(i.e: tomatos: 1 head, butter: 1/2 tbsp)");
+		//ingredientsText.setText("Ingredients(i.e: tomatos: 1 head, butter: 1/2 tbsp)");
 
 		JTextField stepsText = new JTextField(15);
-		stepsText.setText("Steps(i.e: step1, step2, step3)");
+		//stepsText.setText("Steps(i.e: step1, step2, step3)");
+		
+		JLabel nameLabel, descLabel, ingredientsLabel, stepsLabel;
+		nameLabel = new JLabel("Recipe Name:");
+		descLabel = new JLabel("Recipe Description:");
+		ingredientsLabel = new JLabel("Ingredients(i.e: tomatos: 1 head, butter: 1/2 tbsp):");
+		stepsLabel = new JLabel("Steps(i.e: step1, step2, step3):");
 
 		JButton submitButton = new JButton("Submit");
 
@@ -171,15 +177,22 @@ public class GUI implements ActionListener{
 		//setup creation layout
 		//creationPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		//add objects to panel
+		creationPanel.add(nameLabel);
 		creationPanel.add(nameText);
+		creationPanel.add(descLabel);
 		creationPanel.add(descText);
+		creationPanel.add(ingredientsLabel);
 		creationPanel.add(ingredientsText);
+		creationPanel.add(stepsLabel);
 		creationPanel.add(stepsText);
 		creationPanel.add(submitButton);
 
 		creationFrame.add(creationPanel);
 		// creationPanel.add(stepsPanel, BorderLayout.CENTER);
 		// creationPanel.add(recipeDescText);
+
+        creationFrame.setModal(true);
+		creationFrame.setVisible(true);
 	}
 
 	private void drawAddRecipe(){
