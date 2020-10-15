@@ -1,8 +1,8 @@
 SRC:=$(wildcard *.java) $(wildcard */*.java)
-OBJ:=$(wildcard *.class) $(wildcard */*.class)
+OBJ:=$(SRC:.java=.class) $(wildcard */*$*.class)
 
 RecipeBook.jar: $(OBJ)
-	jar cfe $@ App $^
+	jar cfe $@ App $(subst $$,\$$,$^)
 
 %.class: %.java
 	javac $<
