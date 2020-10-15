@@ -1,9 +1,17 @@
+import core.SampleWriter;
+import core.GUI;
+import java.nio.file.Paths;
+import java.nio.file.Path;
+import java.nio.file.Files;
 
-/* 
- * Runs the recipe book app.
- * Recipe Book should be deserialized from 'disk/book.ser'
- * Recipe Book should be serialized to 'disk/book.ser'
- */
 public class App {
+	public static void main(String[] args) {
+		Path path = Paths.get("disk");
+		if (Files.notExists(path)) {
+			SampleWriter.createSamples();
+			System.out.println("Sample Recipes Created");
+		}
+		new GUI();		
+	}
 
 }
