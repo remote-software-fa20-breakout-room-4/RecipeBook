@@ -1,3 +1,5 @@
+package core;
+
 import classes.RecipeBook;
 import classes.Recipe;
 import classes.Ingredient;
