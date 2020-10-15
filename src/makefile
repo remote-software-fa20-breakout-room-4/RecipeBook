@@ -1,5 +1,5 @@
 SRC:=$(wildcard *.java) $(wildcard */*.java)
-OBJ:=$(SRC:.java=.class)
+OBJ:=$(wildcard *.class) $(wildcard */*.class)
 
 RecipeBook.jar: $(OBJ)
 	jar cfe $@ App $^
