@@ -72,14 +72,14 @@ public class GUI implements ActionListener{
 	private void readRecipes(){
 		recipeBook = null;
 		try {
-				FileInputStream fileIn = new FileInputStream("example/example.ser");
+				FileInputStream fileIn = new FileInputStream("disk/book.ser");
 				ObjectInputStream in = new ObjectInputStream(fileIn);
 				recipeBook = (RecipeBook) in.readObject();
 				in.close();
 				fileIn.close();
-				System.out.println("Deserialized from example/example.ser");
+				System.out.println("Deserialized from disk/book.ser");
 		} catch (IOException i) {
-				System.out.println("example/example.ser not found");
+				System.out.println("disk/book.ser not found");
 				recipeBook = new RecipeBook();
 		} catch (ClassNotFoundException c) {
 				System.out.println("Class not found. Made a new one");
@@ -89,14 +89,14 @@ public class GUI implements ActionListener{
 
 	private void addRecipeToFile(){
 		try {
-			File dir = new File("example");
+			File dir = new File("disk");
 			dir.mkdir();
-			FileOutputStream fileOut = new FileOutputStream("example/example.ser");
+			FileOutputStream fileOut = new FileOutputStream("disk/book.ser");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(recipeBook);
 			out.close();
 			fileOut.close();
-			System.out.println("Serialized at example/example.ser");
+			System.out.println("Serialized at disk/book.ser");
 			System.out.println("Exit");
 		} catch (IOException i) {
 				i.printStackTrace();
