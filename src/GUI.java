@@ -333,6 +333,7 @@ public class GUI implements ActionListener{
 	        String firstDisplayString = "<html><h1>" + selectedRecipe.getName() + "</h1><h3>" + selectedRecipe.getDescription() + "</h3><p>Ingredients:<br />" + selectedingredients + "</p><br /><p>Steps:<br />" + firstStep + "</p></html>";
 
 	        //update bottom panel
+					btnPnl.remove(displayToggleButton);
 	        recipeText.setText(firstDisplayString);
 	        btnPnl.add(next);
 	        btnPnl.revalidate();
@@ -342,11 +343,10 @@ public class GUI implements ActionListener{
 	        next.addActionListener(new ActionListener(){
 	          @Override
 	          public void actionPerformed(ActionEvent e){
+
 	            if(buildSteps.getIndex() == selectedRecipe.getSteps().toArray().length-1){ //when last step is reached remove buttons
 	              btnPnl.remove(next);
-	              btnPnl.remove(displayToggleButton);
-	              btnPnl.revalidate();
-	              btnPnl.repaint();
+
 	            }
 
 	            //build display string
