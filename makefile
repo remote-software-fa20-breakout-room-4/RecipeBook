@@ -1,4 +1,4 @@
-SRC:=$(wildcard src/*.java) $(wildcard src/classes/*.java)
+SRC:=$(wildcard *.java) $(wildcard */*.java)
 OBJ:=$(SRC:.java=.class)
 
 RecipeBook.jar: $(OBJ)
