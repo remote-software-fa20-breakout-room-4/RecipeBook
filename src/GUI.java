@@ -1,6 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JToggleButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -123,7 +124,7 @@ public class GUI implements ActionListener{
 
 		JTextField stepsText = new JTextField(15);
 		//stepsText.setText("Steps(i.e: step1, step2, step3)");
-		
+
 		JLabel nameLabel, descLabel, ingredientsLabel, stepsLabel;
 		nameLabel = new JLabel("Recipe Name:");
 		descLabel = new JLabel("Recipe Description:");
@@ -244,6 +245,142 @@ public class GUI implements ActionListener{
 		searchPanel.add(searchButton);
 	}
 
+	//This class allows to iterate through the recipe while storing the
+	//current state of the recipe (which step the user has selected)
+	public class IterateStep{
+	  private int index; //keep track of index
+	  private Recipe recipe;
+	  private String stepBuilder; //slowly increment to build full list of steps
+	  private String original;
+
+
+	  public IterateStep(Recipe recipe){
+	    this.index = 1;
+	    this.recipe = recipe;
+
+	    //build ingredients list
+	    String selectedingredients = "<ul>";
+	    for (int i = 0; i < this.recipe.getIngredients().toArray().length; i++) {
+	      selectedingredients += "<li>" + this.recipe.getIngredients().get(i).getMeasurement() + " " + this.recipe.getIngredients().get(i).getName() + "</li>";
+	    }
+	    selectedingredients += "</ul>";
+
+	    //only put first step
+	    String firstStep = "<ol>" + "<li>" + this.recipe.getSteps().get(0) + "</li>" + "</ol>";
+	    this.stepBuilder = firstStep;
+	    this.original = firstStep;
+	  }
+
+	//this method adds the next step to stepBuilder field
+	  public String getNext(){
+	    if(this.index < this.recipe.getSteps().toArray().length){
+	      String step = this.recipe.getSteps().get(this.index);
+	      this.stepBuilder = this.stepBuilder.substring(0,this.stepBuilder.length()-5);
+	      this.stepBuilder += "<li>"+ step + "</li>" + "</ol>";
+	      this.index += 1;
+	    }
+	    return this.stepBuilder;
+	  }
+
+	  public int getIndex() { return this.index; }
+	}
+
+	//this function defines the recipe exploration functionality in GUI
+	//takes as input the selected recipe of the user
+	private void exploreRecipe(Recipe selectedRecipe){
+	  //build JDialog to house recipe values
+	  JDialog exploreFrame = new JDialog();
+	  exploreFrame.setTitle(selectedRecipe.getName());
+	  exploreFrame.setSize(400,400);
+	  exploreFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	  JPanel mainPanel = new JPanel(new BorderLayout());
+	  mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	  JPanel btnPnl = new JPanel(new FlowLayout(FlowLayout.CENTER));
+	  JButton next = new JButton("Next");
+	  JToggleButton displayToggleButton = new JToggleButton("View step by step",false); //this button toggles between step-by-step and whole recipe view
+
+
+	  //construct Recipe String
+	  String selectedingredients = "<ul>";
+	  for (int i = 0; i < selectedRecipe.getIngredients().toArray().length; i++) {
+	    selectedingredients += "<li>" + selectedRecipe.getIngredients().get(i).getMeasurement() + " " + selectedRecipe.getIngredients().get(i).getName() + "</li>";
+	  }
+	  selectedingredients += "</ul>";
+	  String selectedsteps = "<ol>";
+	  for (int i = 0; i < selectedRecipe.getSteps().toArray().length; i++) {
+	    selectedsteps += "<li>" + selectedRecipe.getSteps().get(i) + "</li>";
+	  }
+	  selectedsteps += "</ol>";
+	  String recipeTextString = "<html><h1>" + selectedRecipe.getName() + "</h1><h3>" + selectedRecipe.getDescription() + "</h3><p>Ingredients:<br />" + selectedingredients + "</p><br /><p>Steps:<br />" + selectedsteps + "</p></html>";
+	  JLabel recipeText = new JLabel("<html><h1>" + selectedRecipe.getName() + "</h1><h3>" + selectedRecipe.getDescription() + "</h3><p>Ingredients:<br />" + selectedingredients + "</p><br /><p>Steps:<br />" + selectedsteps + "</p></html>");
+
+	//define behavior when toggle button is clicked
+	  displayToggleButton.addActionListener(new ActionListener(){
+	    @Override
+	    public void actionPerformed(ActionEvent e){
+	      boolean selected = ((JToggleButton)e.getSource()).isSelected();
+	      if(selected == true){ //if clicked
+	        IterateStep buildSteps = new IterateStep(selectedRecipe); //get new iterator
+	        displayToggleButton.setText("View Entire Recipe");
+
+	        //build String to put in panel
+	        String selectedingredients = "<ul>";
+	        for (int i = 0; i < selectedRecipe.getIngredients().toArray().length; i++) {
+	          selectedingredients += "<li>" + selectedRecipe.getIngredients().get(i).getMeasurement() + " " + selectedRecipe.getIngredients().get(i).getName() + "</li>";
+	        }
+	        selectedingredients += "</ul>";
+	        String firstStep = "<ol>" + "<li>" + selectedRecipe.getSteps().get(0) + "</li>" + "</ol>";
+	        String firstDisplayString = "<html><h1>" + selectedRecipe.getName() + "</h1><h3>" + selectedRecipe.getDescription() + "</h3><p>Ingredients:<br />" + selectedingredients + "</p><br /><p>Steps:<br />" + firstStep + "</p></html>";
+
+	        //update bottom panel
+	        recipeText.setText(firstDisplayString);
+	        btnPnl.add(next);
+	        btnPnl.revalidate();
+	        btnPnl.repaint();
+
+	        //define behavior when next button is clicked
+	        next.addActionListener(new ActionListener(){
+	          @Override
+	          public void actionPerformed(ActionEvent e){
+	            if(buildSteps.getIndex() == selectedRecipe.getSteps().toArray().length-1){ //when last step is reached remove buttons
+	              btnPnl.remove(next);
+	              btnPnl.remove(displayToggleButton);
+	              btnPnl.revalidate();
+	              btnPnl.repaint();
+	            }
+
+	            //build display string
+	            String selectedingredients = "<ul>";
+	            for (int i = 0; i < selectedRecipe.getIngredients().toArray().length; i++) {
+	              selectedingredients += "<li>" + selectedRecipe.getIngredients().get(i).getMeasurement() + " " + selectedRecipe.getIngredients().get(i).getName() + "</li>";
+	            }
+	            selectedingredients += "</ul>";
+	            String displaySteps = "<html><h1>" + selectedRecipe.getName() + "</h1><h3>" + selectedRecipe.getDescription() + "</h3><p>Ingredients:<br />" + selectedingredients + "</p><br /><p>Steps:<br />" + buildSteps.getNext() + "</p></html>";
+	            recipeText.setText(displaySteps);
+	          }
+	        });
+	      } else { //go back to entire recipe view
+	        displayToggleButton.setText("View step by step");
+	        recipeText.setText(recipeTextString);
+	        btnPnl.remove(next);
+	        btnPnl.revalidate();
+	        btnPnl.repaint();
+	      }
+	    }
+	  });
+	  //update panels and add to main JDialog to display
+	  btnPnl.add(displayToggleButton);
+	  mainPanel.add(btnPnl, BorderLayout.SOUTH);
+	  mainPanel.add(recipeText);
+	  exploreFrame.setLocationRelativeTo(frame);
+	  exploreFrame.add(mainPanel);
+	  exploreFrame.pack();
+	  exploreFrame.setModal(true);
+	  exploreFrame.setVisible(true);
+	}
+
+
+
 	private void drawRecipes(){
 		recipesPanel = new JPanel(); //create panel
 
@@ -263,6 +400,8 @@ public class GUI implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				int selectedValue = list.getSelectedIndex();
 				Recipe selectedRecipe = recipes.get(selectedValue);
+				exploreRecipe(selectedRecipe);
+				/*
 				String selectedingredients = "<ul>";
 				for (int i = 0; i < selectedRecipe.getIngredients().toArray().length; i++) {
 					selectedingredients += "<li>" + selectedRecipe.getIngredients().get(i).getMeasurement() + " " + selectedRecipe.getIngredients().get(i).getName() + "</li>";
@@ -282,6 +421,7 @@ public class GUI implements ActionListener{
 		        displayDialog.pack();
 		        displayDialog.setModal(true);
 		        displayDialog.setVisible(true);
+			*/
 			}
 		});
 		FlowLayout recipesLayout = new FlowLayout(FlowLayout.LEFT);
