@@ -42,6 +42,7 @@ public class GUI implements ActionListener{
 		private JList list;
 		private JTextField search;
 		private JDialog displayDialog;
+		private JDialog creationFrame;
 		private JButton displayButton;
 		private ArrayList<Recipe> recipes;
 		private ArrayList<String> names;
@@ -56,7 +57,7 @@ public class GUI implements ActionListener{
 		frame.setSize(frameWidth, frameHeight); //width height of window
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //set what happens when window is closed
 
-		//drawCreation();
+		//draw objects to frame
 		drawRecipes();
 		drawSearch();
 		drawAddRecipe();
@@ -105,8 +106,28 @@ public class GUI implements ActionListener{
 		}
 	}
 
+	private void displayError(String error){
+		creationFrame.setVisible(false);
+		JDialog errorFrame = new JDialog();
+		errorFrame.setTitle("Error Occured");
+		errorFrame.setSize(350, 80);
+		errorFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		JPanel errorPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+		JLabel errorLabel =  new JLabel("<html><font color='red'>" + error + "</font></html>");
+		//errorLabel.setForeground(Color.RED);
+
+		frame.add(new JLabel("<html>Text color: <font color='red'>red</font></html>"));
+
+		errorPanel.add(errorLabel);
+		errorFrame.add(errorPanel);
+		errorFrame.setModal(true);
+		errorFrame.setVisible(true);
+		creationFrame.setVisible(true);
+	}
+
 	private void drawCreation(){
-		JDialog creationFrame = new JDialog();
+		creationFrame = new JDialog();
 		creationFrame.setTitle("Create Recipe");
 		creationFrame.setSize(350, 350); //width height of window
 		creationFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -114,27 +135,21 @@ public class GUI implements ActionListener{
 
 
 		//draw creation objects
-		JTextField nameText = new JTextField(10);
-		//nameText.setText("Recipe Name");
-
-
-		JTextField descText = new JTextField(15);
-		//descText.setText("Recipe Description");
-
-		JTextField ingredientsText = new JTextField(15);
-		//ingredientsText.setText("Ingredients(i.e: tomatos: 1 head, butter: 1/2 tbsp)");
-
-		JTextField stepsText = new JTextField(15);
-		//stepsText.setText("Steps(i.e: step1, step2, step3)");
-
 		JLabel nameLabel, descLabel, ingredientsLabel, stepsLabel;
+
 		nameLabel = new JLabel("Recipe Name:");
+		JTextField nameText = new JTextField(10);
+
 		descLabel = new JLabel("Recipe Description:");
+		JTextField descText = new JTextField(15);
+
 		ingredientsLabel = new JLabel("Ingredients(i.e: tomatos: 1 head, butter: 1/2 tbsp):");
+		JTextField ingredientsText = new JTextField(15);
+
 		stepsLabel = new JLabel("Steps(i.e: step1, step2, step3):");
+		JTextField stepsText = new JTextField(15);
 
 		JButton submitButton = new JButton("Submit");
-
 		submitButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -149,29 +164,38 @@ public class GUI implements ActionListener{
 				String[] stepsArray = steps.split(", ");
 				System.out.println(Arrays.toString(ingArray));
 				System.out.println(Arrays.toString(stepsArray));
-
+				Integer error = 0;
 				Recipe newRecipe = new Recipe(recipes.size()+1); //create new recipe
 				//parse data from array
 				ArrayList<Ingredient> newIngredients = new ArrayList<Ingredient>();
 				ArrayList<String> newSteps = new ArrayList<String>();
 				for (String ing: ingArray) {
-					String[] ingSplit = ing.split(": ");
-					newIngredients.add(new Ingredient(ingSplit[0], ingSplit[1]));
+					try{
+						String[] ingSplit = ing.split(": ");
+						newIngredients.add(new Ingredient(ingSplit[0], ingSplit[1]));
+					} catch(ArrayIndexOutOfBoundsException e){
+						error = 1;
+						String message = "Format ingredient like {ingredient} : {amount}";
+						System.out.println(message);
+						displayError(message);
+					}
 				}
 				for (String step: stepsArray) {
 					newSteps.add(step);
 				}
 				//set recipe params
-				newRecipe.setName(name);
-				newRecipe.setDescription(desc);
-				newRecipe.setIngredients(newIngredients);
-				newRecipe.setSteps(newSteps);
-				//add recipe to recipebook
-				recipeBook.addRecipe(newRecipe);
-				//add and update recipe and recipebook
-				addRecipeToFile();
-				searchRecipeBook();//update recipes
-				creationFrame.dispose();
+				if(error == 0){
+					newRecipe.setName(name);
+					newRecipe.setDescription(desc);
+					newRecipe.setIngredients(newIngredients);
+					newRecipe.setSteps(newSteps);
+					//add recipe to recipebook
+					recipeBook.addRecipe(newRecipe);
+					//add and update recipe and recipebook
+					addRecipeToFile();
+					searchRecipeBook();//update recipes
+					creationFrame.dispose();
+				}
 			}
 		});
 
@@ -194,7 +218,7 @@ public class GUI implements ActionListener{
 		// creationPanel.add(stepsPanel, BorderLayout.CENTER);
 		// creationPanel.add(recipeDescText);
 
-        creationFrame.setModal(true);
+    creationFrame.setModal(true);
 		creationFrame.setVisible(true);
 	}
 
